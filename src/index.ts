@@ -1,8 +1,11 @@
 import express from "express";
-const cors = require("cors");
+import cors from "cors";
+import mongoose from "mongoose";
 
 const app = express();
 app.use(cors());
+
+mongoose.connect("mongodb://localhost:27017/test");
 app.get("/", (req, res) => {
   res.send("Hello TypeScript!");
 });
