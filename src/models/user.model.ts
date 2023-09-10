@@ -1,6 +1,6 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Model } from "mongoose";
 
-export interface IUser {
+interface IUser {
   name: string;
   email: string;
   created: Date;
@@ -14,7 +14,13 @@ export interface IUser {
   //   encryptPassword(password: string): string;
 }
 
-const UserSchema = new Schema<IUser>({
+interface IUserMethods {
+  authenticate(password: string): boolean;
+}
+
+type UserModel = Model<IUser, {}, IUserMethods>;
+
+const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
   name: {
     type: String,
     trim: true,
@@ -38,6 +44,10 @@ const UserSchema = new Schema<IUser>({
   //   },
   //   salt: String,
   //   _password: { type: String },
+});
+
+UserSchema.method("authenticate", (password: string): boolean => {
+  return false;
 });
 
 const User = model("User", UserSchema);
