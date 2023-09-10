@@ -49,6 +49,8 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
   //   _password: { type: String },
 });
 
+/* The password string that's provided by the user is not stored directly in the user
+document. Instead, it is handled as a virtual field. */
 UserSchema.virtual("password")
   .set(function (password: string) {
     this._password = password;
@@ -59,6 +61,9 @@ UserSchema.virtual("password")
     return this._password;
   });
 
+/* The encryption logic and salt generation logic, which are used to generate the
+hashed_password and salt values representing the password value, are defined as
+UserSchema methods. */
 UserSchema.methods = {
   authenticate: function (password: string) {
     return this.encryptPassword(password) === this.hashed_password;
@@ -80,6 +85,19 @@ UserSchema.methods = {
     return Math.round(new Date().valueOf() * Math.random()) + "";
   },
 };
+
+// Password field validation
+/* To add validation constraints to the actual password string that's selected by the end
+user, we need to add custom validation logic and associate it with the
+hashed_password field in the schema. */
+UserSchema.path("hashed_password").validate(function () {
+  if (this._password && this._password.length < 6) {
+    this.invalidate("password", "Password must be ate least 6 characters.");
+  }
+  if (this.isNew && !this._password) {
+    this.invalidate("password", "Password is required.");
+  }
+});
 
 const User = model<IUser, UserModel>("User", UserSchema);
 export default User;
