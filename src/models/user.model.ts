@@ -14,7 +14,6 @@ interface IUser {
   // 表示这个函数返回值类型是string，也可以这样写：encryptPassword: () => string;
   //   encryptPassword(password: string): string;
 }
-
 interface IUserMethods {
   authenticate(password: string): boolean;
   encryptPassword(password: string): string;
