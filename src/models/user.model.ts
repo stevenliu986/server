@@ -89,14 +89,14 @@ UserSchema.methods = {
 /* To add validation constraints to the actual password string that's selected by the end
 user, we need to add custom validation logic and associate it with the
 hashed_password field in the schema. */
-UserSchema.path("hashed_password").validate(function () {
-  if (this._password && this._password.length < 6) {
-    this.invalidate("password", "Password must be ate least 6 characters.");
-  }
-  if (this.isNew && !this._password) {
-    this.invalidate("password", "Password is required.");
-  }
-});
+// UserSchema.path("hashed_password").validate(function () {
+//   if (this._password && this._password.length < 6) {
+//     this.invalidate("password", "Password must be ate least 6 characters.");
+//   }
+//   if (this.isNew && !this._password) {
+//     this.invalidate("password", "Password is required.");
+//   }
+// });
 
 const User = model<IUser, UserModel>("User", UserSchema);
 export default User;
